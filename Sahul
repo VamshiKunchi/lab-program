@@ -1,0 +1,54 @@
+import java.io.*;
+
+// Class must implement Serializable
+class Student implements Serializable {
+
+    private static final long serialVersionUID = 1L;  // Added
+
+    String name;
+    int age;
+
+    Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+public class SerializationDemo {
+    public static void main(String[] args) {
+
+        // Serialization
+        try {
+            Student s1 = new Student("Saaho", 20);
+
+            FileOutputStream fos = new FileOutputStream("data.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(s1);
+            oos.close();
+            fos.close();   // Closed properly
+
+            System.out.println("Object Serialized");
+        } 
+        catch (IOException e) {
+            System.out.println("Serialization Error: " + e);
+        }
+
+        // Deserialization
+        try {
+            FileInputStream fis = new FileInputStream("data.ser");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            Student s2 = (Student) ois.readObject();
+            ois.close();
+            fis.close();   // Closed properly
+
+            System.out.println("Object Deserialized");
+            System.out.println("Name: " + s2.name);
+            System.out.println("Age: " + s2.age);
+        } 
+        catch (IOException | ClassNotFoundException e) {
+            System.out.println("Deserialization Error: " + e);
+        }
+    }
+}
